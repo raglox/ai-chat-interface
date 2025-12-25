@@ -2,7 +2,6 @@
 import React from 'react';
 import Dropdown from '../ui/Dropdown.tsx';
 import { MODELS, ICONS } from '../../constants.tsx';
-// Fix: Corrected import path to point to the actual file name `useTheme.ts`.
 import { useSettings } from '../../hooks/useTheme.ts';
 
 interface HeaderProps {
@@ -19,7 +18,7 @@ const Header: React.FC<HeaderProps> = ({ onSettingsClick }) => {
   ];
 
   return (
-    <header className="flex-shrink-0 h-16 flex items-center justify-between px-6 border-b border-light-border dark:border-dark-border">
+    <header className="sticky top-0 z-20 flex-shrink-0 h-16 flex items-center justify-between px-6 bg-light-bg/90 dark:bg-dark-bg/80 backdrop-blur-sm border-b border-light-border/80 dark:border-dark-border/50">
       <div className="flex items-center gap-2">
         <Dropdown
           trigger={
@@ -57,7 +56,7 @@ const Header: React.FC<HeaderProps> = ({ onSettingsClick }) => {
         </button>
         <Dropdown
           trigger={
-            <button className="w-8 h-8 flex items-center justify-center bg-purple-600 text-white rounded-full font-semibold text-sm">
+            <button className="w-8 h-8 flex items-center justify-center bg-accent text-white rounded-full font-semibold text-sm">
               J
             </button>
           }

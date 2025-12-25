@@ -28,7 +28,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, id }) =
   };
 
   return (
-    <form id={id} onSubmit={handleSubmit} className="bg-white dark:bg-dark-sidebar border border-light-border dark:border-dark-border rounded-xl p-2 shadow-sm">
+    <form id={id} onSubmit={handleSubmit} className="bg-white/80 dark:bg-dark-sidebar/80 backdrop-blur-sm border border-light-border dark:border-dark-border rounded-xl p-2 shadow-lg ring-1 ring-black/5">
       <div className="flex items-start gap-2">
         <textarea
           ref={textareaRef}
@@ -48,13 +48,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, id }) =
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-zinc-800 dark:bg-zinc-200 text-white dark:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
+          className="w-8 h-8 flex items-center justify-center rounded-lg bg-accent text-white disabled:bg-accent/50 disabled:cursor-not-allowed transition-colors flex-shrink-0"
           aria-label="Send message"
         >
           {isLoading ? (
             <ICONS.loader className="w-4 h-4 animate-spin" />
           ) : (
-            <span className="font-semibold">A</span>
+            <ICONS.arrowUp className="w-5 h-5" />
           )}
         </button>
       </div>
@@ -66,7 +66,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, isLoading, id }) =
           <ICONS.search className="w-4 h-4" />
           <span className="hidden sm:inline">Search</span>
         </button>
-        <button type="button" className="flex items-center gap-1.5 text-sm p-1.5 rounded-md bg-blue-50 dark:bg-blue-900/50 text-blue-600 dark:text-blue-300 hover:bg-blue-100 dark:hover:bg-blue-900">
+        <button type="button" className="flex items-center gap-1.5 text-sm p-1.5 rounded-md bg-indigo-50 dark:bg-indigo-900/50 text-accent dark:text-indigo-300 hover:bg-indigo-100 dark:hover:bg-indigo-900">
           <ICONS.sparkles className="w-4 h-4" />
           <span className="hidden sm:inline">Deep Think</span>
         </button>

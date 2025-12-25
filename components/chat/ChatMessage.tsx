@@ -13,7 +13,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ message }) => {
   const isModel = message.role === 'model';
 
   const Avatar = () => (
-    <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${isModel ? 'bg-indigo-100 dark:bg-indigo-900' : 'bg-purple-600 text-white'}`}>
+    <div className={`w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${isModel ? 'bg-indigo-100 dark:bg-indigo-900' : 'bg-accent text-white'}`}>
       {isModel ? <ICONS.brainCircuit className="w-5 h-5 text-accent" /> : <span className="font-semibold text-sm">J</span>}
     </div>
   );
