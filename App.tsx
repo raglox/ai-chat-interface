@@ -5,16 +5,20 @@ import Header from './components/layout/Header.tsx';
 import WelcomeScreen from './components/chat/WelcomeScreen.tsx';
 import ChatView from './components/chat/ChatView.tsx';
 import SettingsModal from './components/settings/SettingsModal.tsx';
-// Fix: Corrected import path to point to the actual file name `useTheme.ts`.
 import { useSettings } from './hooks/useTheme.ts';
 import { ChatHistoryItem, Message } from './types.ts';
-import { useChat } from './hooks/useChat.ts';
 
 const CHATS_STORAGE_KEY = 'gemini-ai-chats';
+
+interface InitialPrompt {
+  chatId: string;
+  content: string;
+}
 
 export default function App() {
   const [isSettingsOpen, setSettingsOpen] = useState(false);
   const { theme } = useSettings();
+  const [initialPrompt, setInitialPrompt] = useState<InitialPrompt | null>(null);
 
   const [chats, setChats] = useState<ChatHistoryItem[]>(() => {
     try {
@@ -63,7 +67,7 @@ export default function App() {
     setChats(prev =>
       prev.map(c => {
         if (c.id === chatId) {
-          const newTitle = c.title === 'New Chat' && messages.length > 0 ? messages[0].content.substring(0, 40) : c.title;
+          const newTitle = c.title === 'New Chat' && messages.length > 1 ? messages[0].content.substring(0, 40) + '...' : c.title;
           return { ...c, messages, title: newTitle };
         }
         return c;
@@ -71,30 +75,17 @@ export default function App() {
     );
   }, []);
 
-  const { sendMessage } = useChat([]); // A detached instance for starting new chats
-
-  const handleStartChat = useCallback(async (messageContent: string) => {
+  const handleStartChat = useCallback((messageContent: string) => {
     const newChat: ChatHistoryItem = {
       id: `chat-${Date.now()}`,
-      title: messageContent.substring(0, 40),
+      title: messageContent.substring(0, 40) + '...',
       messages: [],
       createdAt: new Date().toISOString(),
     };
     setChats(prev => [newChat, ...prev]);
     setActiveChatId(newChat.id);
-    
-    // We need to wait for the state to update before sending the message
-    // A small timeout allows React to re-render with the new active chat
-    setTimeout(() => {
-        const chatViewInstance = document.getElementById(`chat-input-${newChat.id}`);
-        if (chatViewInstance) {
-            // This is a bit of a hack to trigger the sendMessage of the newly mounted ChatView
-            // A more robust solution might involve a command queue or context-based actions
-            sendMessage(messageContent, (updatedMessages) => handleUpdateChatMessages(newChat.id, updatedMessages));
-        }
-    }, 100);
-
-  }, [sendMessage, handleUpdateChatMessages]);
+    setInitialPrompt({ chatId: newChat.id, content: messageContent });
+  }, []);
 
   const chatHistoryByDate = useMemo(() => {
     const groups: { [key: string]: ChatHistoryItem[] } = {
@@ -109,6 +100,8 @@ export default function App() {
     yesterday.setDate(yesterday.getDate() - 1);
     const sevenDaysAgo = new Date(today);
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    chats.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     chats.forEach(chat => {
       const chatDate = new Date(chat.createdAt);
@@ -145,6 +138,8 @@ export default function App() {
               key={activeChat.id} 
               chat={activeChat}
               onUpdate={(messages) => handleUpdateChatMessages(activeChat.id, messages)}
+              initialPrompt={initialPrompt?.chatId === activeChat.id ? initialPrompt.content : null}
+              onPromptHandled={() => setInitialPrompt(null)}
             />
           ) : (
             <WelcomeScreen onStartChat={handleStartChat} />

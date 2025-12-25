@@ -23,11 +23,11 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStartChat }) => {
           <ChatInput onSendMessage={onStartChat} isLoading={false} />
         </div>
         <div className="flex flex-wrap justify-center gap-3 mt-6">
-          <QuickToolButton icon={ICONS.sparkles} label="AI Slides" />
-          <QuickToolButton icon={ICONS.sparkles} label="Full-Stack" />
+          <QuickToolButton icon={ICONS.presentation} label="AI Slides" />
+          <QuickToolButton icon={ICONS.layers} label="Full-Stack" />
           <QuickToolButton icon={ICONS.sparkles} label="Magic Design" />
-          <QuickToolButton icon={ICONS.sparkles} label="Write Code" />
-          <QuickToolButton icon={ICONS.sparkles} label="Deep Research" />
+          <QuickToolButton icon={ICONS.code} label="Write Code" />
+          <QuickToolButton icon={ICONS.search} label="Deep Research" />
         </div>
       </div>
     </div>

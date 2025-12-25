@@ -1,8 +1,7 @@
 
 import { useState, useCallback } from 'react';
 import { Message } from '../types.ts';
-import { geminiService } from '../lib/gemini.ts';
-// Fix: Corrected import path to point to the actual file name `useTheme.ts`.
+import { apiService } from '../lib/api.ts';
 import { useSettings } from './useTheme.ts';
 
 export const useChat = (initialMessages: Message[]) => {
@@ -35,7 +34,7 @@ export const useChat = (initialMessages: Message[]) => {
     if (onUpdate) onUpdate([...updatedMessages, { id: modelMessageId, role: 'model', content: '', isStreaming: true }]);
 
 
-    await geminiService.streamMessage(
+    await apiService.streamMessage(
       updatedMessages,
       selectedModel.id,
       (chunk) => {
